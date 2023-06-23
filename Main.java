@@ -1,26 +1,35 @@
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
-    private static Scanner scanner= new Scanner(System.in);
-    Produto venda = new Produto(); 
+    private static Scanner scanner = new Scanner(System.in);
+  //  private static Produto venda = new Produto();
 
-    static double pastelPreço = 5.50;
-    static double cafePreço = 2.10;
-    static double xisPreço = 15.99;
-    static double pizzaPreço = 20.75;
+    static double pastelPreco = 5.50;
+    static double cafePreco = 2.10;
+    static double xisPreco = 15.99;
+    static double pizzaPreco = 20.75;
 
-    public static void main(String[] args) throws InterruptedException{
-        
-
+    public static void main(String[] args) throws InterruptedException {
         boolean vendendo = true;
-        while(vendendo == true) {
+        while (vendendo) {
             System.out.println("\n*** LOJA DE VENDA ***\n");
             Thread.sleep(1000);
             System.out.println("\n[ 1 ] Visualizar produtos.\n");
             System.out.println("[ 2 ] Sair.\n");
             String escolha = scanner.nextLine();
+            
+        LocalDateTime dataHoraAtual = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dataHoraFormatadaInicial = dataHoraAtual.format(formatter);
+        System.out.println("┌─────────────────────────────────────────────────────────┐");
+        System.out.println("│Data e Hora do início Compra: "+dataHoraFormatadaInicial+"        │");
+        System.out.println("└─────────────────────────────────────────────────────────┘");
 
-            switch(escolha){
+
+
+            switch (escolha) {
                 case "1":
                     Produto.produtos();
 
@@ -36,57 +45,85 @@ public class Main {
 
                 default:
                     System.out.println("Opção inválida, por favor tente novamente.");
-                    break;            
-                }
+                    break;
+            }
 
         }
     }
 
-    public static void Case1(String escolha1) throws InterruptedException{
-        switch(escolha1){
+    public static void Case1(String escolha1) throws InterruptedException {
+        switch (escolha1) {
             case "S":
+            case "s":
+                boolean comprando = true;
+                Carrinho carrinho = new Carrinho();
 
-            boolean comprando = true;
-            while(comprando) {
-                    System.out.println("*** LISTA DE PRODUTOS ***");
+                while (comprando) {
+                    System.out.println("\n*** LISTA DE PRODUTOS ***\n");
                     System.out.println("┌──────────────────────────┐");
-                    System.out.println("│[1] Pastel de Carne: " + pastelPreço + "  │");
+                    System.out.println("│[1] Pastel de Carne: " + pastelPreco + "  │");
                     System.out.println("├──────────────────────────┤");
-                    System.out.println("│[2] Café: " + cafePreço + "             │");
+                    System.out.println("│[2] Café: " + cafePreco + "             │");
                     System.out.println("├──────────────────────────┤");
-                    System.out.println("│[3] Xis de Carne: " + xisPreço + "   │");
+                    System.out.println("│[3] Xis de Carne: " + xisPreco + "   │");
                     System.out.println("├──────────────────────────┤");
-                    System.out.println("│[4] Pizza de Frango: " + pizzaPreço + "│");
+                    System.out.println("│[4] Pizza de Frango: " + pizzaPreco + "│");
                     System.out.println("└──────────────────────────┘");
 
                     System.out.print("Escolha o produto que você deseja:");
+                    String escolhaProduto = scanner.nextLine();
                     System.out.print("Escolha a quantidade:");
-                    String a = scanner.nextLine();
-                    Case2(a);       
-            }
+                    String escolhaQuantidade = scanner.nextLine();
 
-            break;
+                    carrinho.adicionarProduto(escolhaProduto, Integer.parseInt(escolhaQuantidade));
 
-            case "s":
-            System.out.println("Responda de acordo com a opção fornecida.");
-            return;
+                    System.out.print("\nDeseja adicionar mais produtos? S/N\n");
+                    String resposta = scanner.nextLine();
+                    if (resposta.equalsIgnoreCase("N")) {
+                        comprando = false;
+                    }
+                }
 
-            case "N":
-                Acoes.Encerra();
+                Case2(carrinho);
                 break;
 
+            case "N":
             case "n":
-            System.out.println("Responda de acordo com a opção fornecida.");
-            return;
+                System.out.println("Responda de acordo com a opção fornecida.");
+                return;
         }
     }
 
     
-    public static void Case2(String a){
-        switch(a){
-            case "1":
-            System.out.println("pastel");
-            break;
-        }
+        public static void Case2(Carrinho carrinho) throws InterruptedException  {
+        carrinho.mostrarResumoCompra(pastelPreco, cafePreco, xisPreco, pizzaPreco);
+
+        System.out.println("\n*** FORMAS DE PAGAMENTO ***");
+        System.out.println("┌──────────────────────────┐");
+        System.out.println("│[1] Débito.               │");
+        System.out.println("├──────────────────────────┤");
+        System.out.println("│[2] Crédito.              │");
+        System.out.println("├──────────────────────────┤");
+        System.out.println("│[3] Pix.                  │");
+        System.out.println("├──────────────────────────┤");
+        System.out.println("│[4] Dinheiro.             │");
+        System.out.println("└──────────────────────────┘");
+
+        System.out.print("Escolha a forma de pagamento:");
+        String formaPagamento = scanner.nextLine();
+
+        LocalDateTime dataHoraFinal = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dataHoraFormatadaFinal = dataHoraFinal.format(formatter);
+
+
+        System.out.println("┌─────────────────────────────────────────────────────────┐");
+        System.out.println("│Data e Hora do final Compra: "+dataHoraFormatadaFinal+"         │");
+        System.out.println("│Forma de Pagamento: " + formaPagamento + "                                    │");
+        System.out.println("└─────────────────────────────────────────────────────────┘");
+        
+        System.out.println("┌──────────────────────────┐");
+        System.out.println("│ Obrigado por Comprar.    │");
+        System.out.println("└──────────────────────────┘");
     }
-}
+    }
