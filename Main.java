@@ -89,7 +89,7 @@ public class Main {
 
             case "N":
             case "n":
-                System.out.println("Responda de acordo com a opção fornecida.");
+                comprando = false;
                 return;
         }
     }
